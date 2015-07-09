@@ -35,6 +35,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.Timeout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -100,6 +103,7 @@ public class GrokMobileAppTest {
     }
 
 
+    @Rule public TestRule timeout1 = new Timeout(30000);
     @Test(priority = 0)
     @Parameters({"url", "pwd"})
     public void login(String serverUrl, String password)
@@ -118,7 +122,8 @@ public class GrokMobileAppTest {
     }
 
 
-    @Test(priority = 1)
+    @Rule public TestRule timeout2 = new Timeout(30000);
+    @Test(priority = 1 , dependsOnMethods = {"login"})
     public void skipTutorial()
             throws InterruptedException {
         // SKIP TUTORIAL
@@ -134,7 +139,8 @@ public class GrokMobileAppTest {
     }
 
 
-    @Test(priority = 2)
+    @Rule public TestRule timeout3 = new Timeout(30000);
+    @Test(priority = 2 , dependsOnMethods = {"skipTutorial"})
     public void mainPage()
             throws InterruptedException {
         String sortedBy = TestUtilities.waitGetText(
@@ -147,7 +153,8 @@ public class GrokMobileAppTest {
         TestUtilities.waitClick(CLOSE_BUTTON, driver, WAIT_TIME);
     }
 
-    @Test(priority = 3)
+    @Rule public TestRule timeout4 = new Timeout(30000);
+    @Test(priority = 3 , dependsOnMethods = {"mainPage"})
     public void pageModules()
             throws InterruptedException {
     String[] tabName = {"DAY", "WEEK", "HOUR"};
@@ -159,7 +166,8 @@ public class GrokMobileAppTest {
     }
 
 
-    @Test(priority = 4)
+    @Rule public TestRule timeout5 = new Timeout(30000);
+    @Test(priority = 4 , dependsOnMethods = {"pageModules"})
     public void swipeRightAndLeft()
             throws InterruptedException {
         TestUtilities.swipe(driver, true);
@@ -167,7 +175,8 @@ public class GrokMobileAppTest {
     }
 
 
-    @Test(priority = 5)
+    @Rule public TestRule timeout6 = new Timeout(30000);
+    @Test(priority = 5 , dependsOnMethods = {"swipeRightAndLeft"})
     @Parameters({"deviceName"})
     public void settings(String deviceName)
             throws InterruptedException {
